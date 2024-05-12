@@ -45,7 +45,7 @@
                 <h4 class="mt-2 text-primary">All Users in database!</h4>
             </div>
             <div class="col-lg-6">
-                <button type="button" class="btn btn-primary m-1 float-right"><i class="fas fa-user-plus fa-lg"></i>&nbsp;&nbsp; Add New User</button>
+                <button type="button" class="btn btn-primary m-1 float-right" data-toggle="modal" data-target="#addModal"><i class="fas fa-user-plus fa-lg"></i>&nbsp;&nbsp; Add New User</button>
                 <a href="#" class="btn btn-success m-1 float-right"><i class="fas fa-table fa-lg"></i> Export to Excel</a>
             </div>
         </div>
@@ -85,6 +85,36 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Add new User modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New User</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body px-4">
+               <form action="" method="post" id="form-data">
+                    <div class="form-group">
+                        <input type="text" name="fname" placeholder="First Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="lname" placeholder="Last Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" name="phone" placeholder="Phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="insert" id="insert" value="Add User" class="btn btn-danger btn-block">
+                    </div>
+               </form>
+            </div>  
+        </div>
         </div>
     </div>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
