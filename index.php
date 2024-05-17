@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website ban hang cong nghe</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -53,36 +56,6 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="table-responsive" id="showUser">
-                    <table class="table table-striped table-sm table-bordered">
-                        <thead>
-                            <tr class="text-center">
-                                <th>ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>E-mail</th>
-                                <th>Phone</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                for($i=1;$i<100;$i++):
-                            ?>
-                            <tr class="text-center text-secondary">
-                                <td><?=$i;?></td>
-                                <td>User <?=$i;?></td>
-                                <td>Title <?=$i;?></td>
-                                <td>Email.<?=$i;?>@gmail.com</td>
-                                <td>0123564778</td>
-                                <td>
-                                    <a href="#" title="View Details" class="text-success"><i class="fas fa-info-circle fa-lg"></i></a>&nbsp;&nbsp;
-                                    <a href="#" title="View Details" class="text-primary"><i class="fas fa-edit fa-lg"></i></a>&nbsp;&nbsp;
-                                    <a href="#" title="View Details" class="text-danger"><i class="fas fa-trash-alt fa-lg"></i></a>&nbsp;&nbsp;
-                                </td>
-                            </tr>
-                            <?php endfor;?>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -117,16 +90,48 @@
         </div>
         </div>
     </div>
-    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs4/dt-2.0.7/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script type="text/javascript">
     $(document).ready(function(){
-        $("table").DataTable();
+        showAllUser();
+        function showAllUser(){
+            $.ajax({
+                url: "action.php",
+                type: "POST",
+                data: {action:"view"},
+                success: function(response){
+                    $("#showUser").html(response);
+                    $("table").DataTable({
+                        order: [0,'desc']
+                    });
+                }
+            });
+        }
+        // insert ajax request
+        $("#insert").click(function(e){
+            if($("#form-data")[0].checkValidity()){
+                e.preventDefault();
+                $.ajax({
+                    url: "action.php",
+                    type: "POST",
+                    data: $("#form-data").serialize()+"&action=insert",
+                    success: function(response){
+                        Swal.fire({
+                            title: 'User added successfully',
+                            type: 'success',
+                        })
+                        $("#addModal").modal('hide');
+                        $("#form-data")[0].reset();
+                        showAllUser();
+                    }
+                });
+            }
+        });
     });
 </script>
 </body>

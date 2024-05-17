@@ -7,12 +7,13 @@
         public function __construct(){
             try{
                 $this->conn = new PDO($this->db,$this->user,$this->pass);
+                // echo "success conenct database";
             }
             catch(PDOException $e){
                 echo $e->getMessage();
             }
         }
-        public function insert($fname,$lastname,$email,$phone){
+        public function insert($fname,$lname,$email,$phone){
             $sql = "INSERT INTO users (first_name,last_name,email,phone) VALUES (:fname,:lname,:email,:phone)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute(['fname'=>$fname,'lname'=>$lname,'email'=>$email,'phone'=>$phone]);
@@ -56,7 +57,4 @@
             return $t_rows;
         }
     }
-    
-    $ob = new Database();
-    echo $ob->totalRowCount();
 ?>
