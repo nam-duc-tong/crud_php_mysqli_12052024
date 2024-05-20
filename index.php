@@ -90,6 +90,39 @@
         </div>
         </div>
     </div>
+    <!-- add -->
+     <!-- edit User modal -->
+     <div class="modal" id="editModal">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit User</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body px-4">
+               <form action="" method="post" id="edit-form-data">
+                    <input type="hidden" id="id" name="id">
+                    <div class="form-group">
+                        <input type="text" name="fname" class="form-control" id="fname" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="lname" class="form-control" id="lname" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email"  class="form-control" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" name="phone" class="form-control" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="update" id="update" value="Update User" class="btn btn-primary btn-block">
+                    </div>
+               </form>
+            </div>  
+        </div>
+        </div>
+    </div>
+    <!-- edit -->
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -132,6 +165,77 @@
                 });
             }
         });
+        // edit user
+        $("body").on("click",".editBtn",function(e){
+            e.preventDefault();
+            edit_id = $(this).attr('id');
+            $.ajax({
+                url: "action.php",
+                type: "POST",
+                data: {edit_id: edit_id},
+                success: function(response){
+                    data = JSON.parse(response);
+                    // console.log(data);
+                    $("#id").val(data.id);
+                    $("#fname").val(data.first_name);
+                    $("#lname").val(data.last_name);
+                    $("#email").val(data.email);
+                    $("#phone").val(data.phone);
+                }
+            })
+        });
+        // update user
+        $("#update").click(function(e){
+            if($("#edit-form-data")[0].checkValidity()){
+                e.preventDefault();
+                $.ajax({
+                    url: "action.php",
+                    type: "POST",
+                    data: $("#edit-form-data").serialize()+"&action=update",
+                    success: function(response){
+                        Swal.fire({
+                            title: 'User updated successfully',
+                            type: 'success',
+                        })
+                        $("#editModal").modal('hide');
+                        $("#edit-form-data")[0].reset();
+                        showAllUser();
+                    }
+                });
+            }
+        });
+        // delete ajax request
+        $("body").on("click",".delBtn",function(e){
+            e.preventDefault();
+            var tr = $(this).closest('tr');
+            del_id = $(this).attr('id');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: "action.php",
+                            type: "POST",
+                            data: {del_id: del_id},
+                            success: function(response){
+                                tr.css('background-color','#ff6666');
+                                Swal.fire(
+                                    'Deleted!',
+                                    'User Deleted successfully',
+                                    'success'
+                                )
+                            showAllUser();
+                        }
+                    });
+                 }
+            });
+        })
     });
 </script>
 </body>
